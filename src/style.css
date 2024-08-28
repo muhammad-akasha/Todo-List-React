@@ -55,3 +55,9 @@
 .none {
   display: none !important;
 }
+
+@media (max-width:786px){
+  .todo-container{
+    width: 100%;
+  }
+}
