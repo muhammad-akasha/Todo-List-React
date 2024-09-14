@@ -6,11 +6,14 @@ import Button from "react-bootstrap/Button";
 import Edit from "./Edit";
 import DeleteTodo from "./DeleteTodo";
 import { db, collection, addDoc, getDocs } from "./firebaseConfig";
+import { Puff, ColorRing } from "react-loader-spinner";
+import Swal from "sweetalert2";
 
 export default function App() {
   const [isEdited, setEditedIndex] = useState(null);
   const [todo, setTodo] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loader, setLoader] = useState(null);
   const todoVal = useRef();
 
   async function addTodo(e) {
@@ -18,9 +21,15 @@ export default function App() {
     const newTodo = todoVal.current.value;
 
     if (!newTodo) {
-      alert("Please Enter Todo");
+      Swal.fire({
+        icon: "warning",
+        iconColor: "red",
+        title: "Please Enter Todo",
+        position: "top",
+      });
       return;
     }
+    setLoader(true);
     const docRef = await addDoc(collection(db, "Todo_lists"), {
       todoItem: newTodo,
     });
@@ -29,6 +38,7 @@ export default function App() {
       { todoItem: newTodo, todoId: docRef.id },
     ]);
     todoVal.current.value = "";
+    setLoader(false);
   }
   const getTodos = async () => {
     try {
@@ -67,10 +77,40 @@ export default function App() {
             />
             <Button type="submit" variant="primary">
               Add Todo
+              {loader ? (
+                <ColorRing
+                  visible={true}
+                  height="25"
+                  width="25"
+                  ariaLabel="color-ring-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="color-ring-wrapper"
+                  colors={[
+                    "#e15b64",
+                    "#f47e60",
+                    "#f8b26a",
+                    "#abbd81",
+                    "#849b87",
+                  ]}
+                />
+              ) : null}
             </Button>
           </InputGroup>
           {loading ? (
-            <p> Loading... </p>
+            <div
+              style={{ zIndex: 999, backgroundColor: "#fff" }}
+              className="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center w-100 h-100 zindex-100"
+            >
+              <Puff
+                visible={true}
+                height="100"
+                width="100"
+                color="rgb(13 110 253)"
+                ariaLabel="puff-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+            </div>
           ) : (
             <ul className={todo.length > 0 ? "todo-list" : "none"}>
               {todo.map((item, index) => (
