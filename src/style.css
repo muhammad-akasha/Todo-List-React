@@ -10,11 +10,6 @@
   border-radius: 10px;
   background: #f9f9f9;
 }
-.todo-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .todo-form {
   width: 100%;
 }
@@ -46,18 +41,14 @@
   border-radius: 10px;
 }
 .todo-list div {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  align-items: center;
-  margin: 4px 0px;
+  margin: 10px 0px;
 }
 .none {
   display: none !important;
 }
 
-@media (max-width:786px){
-  .todo-container{
+@media (max-width: 786px) {
+  .todo-container {
     width: 100%;
   }
 }
