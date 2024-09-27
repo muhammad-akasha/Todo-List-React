@@ -4,8 +4,8 @@
 }
 .todo-container {
   width: 630px;
-  margin: 100px auto;
-  padding: 70px 30px;
+  margin: 70px auto;
+  padding: 40px 30px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
   border-radius: 10px;
   background: #f9f9f9;
@@ -18,6 +18,11 @@
   font-size: 40px;
   letter-spacing: 6px;
   font-style: italic;
+}
+.single-todo {
+  box-shadow: 1px 0px 10px #f3f3;
+  border-radius: 5px;
+  padding: 5px 10px;
 }
 .todo-inp {
   width: 100%;
@@ -37,7 +42,6 @@
   margin: 30px 0px 0px;
   padding: 10px;
   font-weight: 400;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
   border-radius: 10px;
 }
 .todo-list div {
@@ -50,5 +54,6 @@
 @media (max-width: 786px) {
   .todo-container {
     width: 100%;
+    padding: 30px 10px;
   }
 }

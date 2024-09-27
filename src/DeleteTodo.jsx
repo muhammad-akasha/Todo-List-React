@@ -1,11 +1,9 @@
-import { deleteDoc, doc } from "firebase/firestore";
-import Button from "react-bootstrap/Button";
-import { db } from "./firebaseConfig";
-import { useState } from "react";
 import { ColorRing } from "react-loader-spinner";
 import Swal from "sweetalert2";
 import { deleteTodo } from "./redux/reducers/todoSlice";
 import { useDispatch } from "react-redux";
+import { MdDelete } from "react-icons/md";
+import { useState } from "react";
 
 export default function DeleteTodo({ id, isEdited, index }) {
   const dispatch = useDispatch();
@@ -39,12 +37,7 @@ export default function DeleteTodo({ id, isEdited, index }) {
     }
   };
   return (
-    <Button
-      onClick={deleteCurrentTodo}
-      disabled={isButtonDisabled}
-      variant="danger"
-    >
-      Delete
+    <>
       {loader ? (
         <ColorRing
           visible={true}
@@ -56,6 +49,11 @@ export default function DeleteTodo({ id, isEdited, index }) {
           colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
         />
       ) : null}
-    </Button>
+      <MdDelete
+        style={{ color: "#dc3545" }}
+        className="fs-5"
+        onClick={deleteCurrentTodo}
+      />
+    </>
   );
 }

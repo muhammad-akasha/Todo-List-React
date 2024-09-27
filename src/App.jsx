@@ -9,6 +9,7 @@ import { Puff, ColorRing } from "react-loader-spinner";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { addTodo, fetchTodos } from "./redux/reducers/todoSlice";
+import { MdEdit } from "react-icons/md";
 
 export default function App() {
   const [isEdited, setEditedIndex] = useState(null);
@@ -113,16 +114,18 @@ export default function App() {
           <ul className={todos.length > 0 ? "todo-list" : "none"}>
             {todos.map((item, index) => (
               <div
-                className="singal-todo d-flex flex-column gap-10 flex-sm-row justify-content-sm-between align-items-sm-center gap-3"
+                className="single-todo d-flex justify-content-between align-items-center gap-3"
                 key={item.id}
               >
                 {isEdited !== index ? (
                   <>
                     <li>{item.todoItem}</li>
-                    <div className="d-flex flex-column gap-2 flex-sm-row ">
-                      <Button onClick={() => startEdit(index)} variant="info">
-                        Edit
-                      </Button>{" "}
+                    <div className="d-flex gap-3 align-items-center">
+                      <MdEdit
+                        style={{ color: "#007bff" }}
+                        className="fs-4"
+                        onClick={() => startEdit(index)}
+                      />
                       <DeleteTodo
                         index={index}
                         id={item.id}
