@@ -2,28 +2,32 @@ import React, { useState } from "react";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "./firebaseConfig";
+import { ColorRing } from "react-loader-spinner";
+import { useDispatch } from "react-redux";
+import { editTodo } from "./redux/reducers/todoSlice";
 
-export default function Edit({ todo, index, setTodo, item, setEditedIndex }) {
-  const [updateTodo, setUpdatodo] = useState(item.todoItem);
+export default function Edit({ index, item, setEditedIndex, id }) {
+  const dispatch = useDispatch();
+  const [loader, setLoader] = useState(null);
+  const [updateTodo, setUpdatetodo] = useState(item.todoItem);
   const handleEdit = async () => {
     const trimmedTodo = updateTodo.trim();
     if (trimmedTodo) {
       try {
-        let newUpdatedArr = [...todo];
-        newUpdatedArr[index].todoItem = trimmedTodo;
-        setTodo([...newUpdatedArr]);
+        setLoader(true);
+        await dispatch(editTodo({ id, editedTodo: updateTodo, index }));
+        setLoader(false);
         setEditedIndex(false);
-        const todoRef = doc(db, "Todo_lists", newUpdatedArr[index].todoId);
-        await updateDoc(todoRef, {
-          todoItem: trimmedTodo,
-        });
       } catch (error) {
         console.log(error);
       }
     } else {
       alert("Todo item cannot be empty or just whitespace.");
+    }
+  };
+  const submitOnEnter = (e) => {
+    if (e.key === "Enter") {
+      handleEdit();
     }
   };
 
@@ -33,12 +37,24 @@ export default function Edit({ todo, index, setTodo, item, setEditedIndex }) {
         <Form.Control
           placeholder="Enter Updated Todo"
           value={updateTodo}
-          onChange={(e) => setUpdatodo(e.target.value)}
+          onChange={(e) => setUpdatetodo(e.target.value)}
           aria-label="Default"
+          onKeyDown={submitOnEnter}
           aria-describedby="inputGroup-sizing-default"
         />
         <Button onClick={handleEdit} type="button" variant="primary">
           Update
+          {loader && (
+            <ColorRing
+              visible={true}
+              height="25"
+              width="25"
+              ariaLabel="color-ring-loading"
+              wrapperStyle={{}}
+              wrapperClass="color-ring-wrapper"
+              colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+            />
+          )}
         </Button>{" "}
       </InputGroup>
     </>

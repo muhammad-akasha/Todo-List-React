@@ -1,16 +1,16 @@
-import { deleteDoc, doc } from "firebase/firestore";
-import Button from "react-bootstrap/Button";
-import { db } from "./firebaseConfig";
-import { useState } from "react";
 import { ColorRing } from "react-loader-spinner";
 import Swal from "sweetalert2";
+import { deleteTodo } from "./redux/reducers/todoSlice";
+import { useDispatch } from "react-redux";
+import { MdDelete } from "react-icons/md";
+import { useState } from "react";
 
-export default function DeleteTodo({ setTodo, todo, index, isEdited }) {
+export default function DeleteTodo({ id, isEdited, index }) {
+  const dispatch = useDispatch();
   const isButtonDisabled = isEdited === index;
   const [loader, setLoader] = useState(null);
-  const deleteTodo = () => {
+  const deleteCurrentTodo = () => {
     try {
-      setLoader(true);
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -22,15 +22,14 @@ export default function DeleteTodo({ setTodo, todo, index, isEdited }) {
         confirmButtonText: "Yes, delete it!",
       }).then(async (result) => {
         if (result.isConfirmed) {
+          setLoader(true);
           Swal.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",
             icon: "success",
           });
+          dispatch(deleteTodo(id));
         }
-        await deleteDoc(doc(db, "Todo_lists", todo[index].todoId));
-        todo.splice(index, 1);
-        setTodo([...todo]);
         setLoader(false);
       });
     } catch (error) {
@@ -38,8 +37,7 @@ export default function DeleteTodo({ setTodo, todo, index, isEdited }) {
     }
   };
   return (
-    <Button onClick={deleteTodo} disabled={isButtonDisabled} variant="danger">
-      Delete
+    <>
       {loader ? (
         <ColorRing
           visible={true}
@@ -51,6 +49,11 @@ export default function DeleteTodo({ setTodo, todo, index, isEdited }) {
           colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
         />
       ) : null}
-    </Button>
+      <MdDelete
+        style={{ color: "#dc3545" }}
+        className="fs-5"
+        onClick={deleteCurrentTodo}
+      />
+    </>
   );
 }
